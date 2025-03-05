@@ -1,6 +1,7 @@
 package ru.netology.javaqa.repository;
 
 import ru.netology.javaqa.domain.Product;
+import ru.netology.javaqa.exceptions.AlreadyExistsException;
 import ru.netology.javaqa.exceptions.NotFoundException;
 
 public class ShopRepository {
@@ -16,7 +17,11 @@ public class ShopRepository {
     }
 
     public void add(Product product) {
-        products = addToArray(products, product);
+        if (findById(product.getId()) == null) {
+            products = addToArray(products, product);
+        } else {
+            throw new AlreadyExistsException("Element with id " + product.getId() + " already exists");
+        }
     }
 
     public Product[] findAll() {

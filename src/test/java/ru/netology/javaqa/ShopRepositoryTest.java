@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.netology.javaqa.domain.Product;
+import ru.netology.javaqa.exceptions.AlreadyExistsException;
 import ru.netology.javaqa.exceptions.NotFoundException;
 import ru.netology.javaqa.repository.ShopRepository;
 
@@ -19,6 +20,7 @@ public class ShopRepositoryTest {
     Product product8 = new Product(8, "Лонгслив", 350);
     Product product9 = new Product(9, "Кофта", 1500);
     Product product10 = new Product(10, "Перчатки", 800);
+    Product product11 = new Product(11, "Куртка", 3500);
 
     ShopRepository repo = new ShopRepository();
 
@@ -51,6 +53,25 @@ public class ShopRepositoryTest {
 
         Assertions.assertThrows(NotFoundException.class, () -> {
             repo.remove(11);
+        });
+    }
+
+    @Test
+    public void shouldAddProduct() {
+
+        repo.add(product11);
+
+        Product[] expected = { product1, product2, product3, product4, product5, product6, product7, product8, product9, product10, product11 };
+        Product[] actual = repo.findAll();
+
+        Assertions.assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldNotAddProductBecauseExists() {
+
+        Assertions.assertThrows(AlreadyExistsException.class, () -> {
+            repo.add(product5);
         });
     }
 }
